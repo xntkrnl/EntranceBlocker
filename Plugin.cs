@@ -37,7 +37,7 @@ namespace EntranceBlocker
 
             mls = Logger;
 
-            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, "mborsh.WiderShipMod.cfg"), true);
+            var cfg = new ConfigFile(Path.Combine(Paths.ConfigPath, $"{modGUID}.cfg"), true);
             EBConfig.CreateConfig(cfg);
 
             assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
