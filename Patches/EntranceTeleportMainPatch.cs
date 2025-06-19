@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using DunGen;
+using DunGen.Graph;
+using HarmonyLib;
 using UnityEngine;
 
 namespace EntranceBlocker.Patches
@@ -8,8 +10,6 @@ namespace EntranceBlocker.Patches
         [HarmonyPostfix, HarmonyPatch(typeof(EntranceTeleport), nameof(EntranceTeleport.Awake))]
         static void EntranceTeleportAwakePatch(EntranceTeleport __instance)
         {
-            if (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName)) return;
-
             if (__instance.isEntranceToBuilding && __instance.entranceId == 0 && (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockOutsideMainEntrance.Value)) return;
             if (__instance.isEntranceToBuilding && __instance.entranceId != 0 && (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockOutsideFireExit.Value)) return;
             if (!__instance.isEntranceToBuilding && __instance.entranceId == 0 && (EBConfig.blacklistedMoonsInsideList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockInsideMainEntrance.Value)) return;
@@ -38,7 +38,7 @@ namespace EntranceBlocker.Patches
 
             gameobject.transform.localScale = new Vector3(__instance.entranceId == 0 ? 1.3f : 0.75f, 1f, 1f);
 
-            EntranceBlockerPlugin.mls.LogInfo($"Spawn entranceBlocker!\nEntrance name: {__instance.gameObject.name}" +
+            EntranceBlockerPlugin.mls.LogDebug($"Spawn entranceBlocker!\nEntrance name: {__instance.gameObject.name}" +
                 $"\nEntranceID: {__instance.entranceId}\nentranceBlocker position: {gameobject.transform.position}\nLookAt() position: {globalPosition}\n");
         }
 
