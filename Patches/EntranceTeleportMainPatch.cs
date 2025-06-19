@@ -10,10 +10,10 @@ namespace EntranceBlocker.Patches
         {
             if (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName)) return;
 
-            if (__instance.isEntranceToBuilding && __instance.entranceId == 0 && !EBConfig.blockOutsideMainEntrance.Value) return;
-            if (__instance.isEntranceToBuilding && __instance.entranceId != 0 && !EBConfig.blockOutsideFireExit.Value) return;
-            if (!__instance.isEntranceToBuilding && __instance.entranceId == 0 && !EBConfig.blockInsideMainEntrance.Value) return;
-            if (!__instance.isEntranceToBuilding && __instance.entranceId != 0 && !EBConfig.blockInsideFireExit.Value) return;
+            if (__instance.isEntranceToBuilding && __instance.entranceId == 0 && (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockOutsideMainEntrance.Value)) return;
+            if (__instance.isEntranceToBuilding && __instance.entranceId != 0 && (EBConfig.blacklistedMoonsList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockOutsideFireExit.Value)) return;
+            if (!__instance.isEntranceToBuilding && __instance.entranceId == 0 && (EBConfig.blacklistedMoonsInsideList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockInsideMainEntrance.Value)) return;
+            if (!__instance.isEntranceToBuilding && __instance.entranceId != 0 && (EBConfig.blacklistedMoonsInsideList.Contains(StartOfRound.Instance.currentLevel.PlanetName) || !EBConfig.blockInsideFireExit.Value)) return;
 
             if (Random.Range(0f, 1f) > EBConfig.blockChance.Value) return;
 
