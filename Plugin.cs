@@ -47,7 +47,7 @@ namespace EntranceBlocker
                 harmony.PatchAll(typeof(mattymattyEntranceTeleportPatch));
             else
             {
-                mls.LogWarning("You are trying to run this mod without EntranceTeleportOptimizations. Expect lags.");
+                mls.LogMessage("You are trying to run EntranceBlocker without EntranceTeleportOptimizations. Expect lags.");
                 harmony.PatchAll(typeof(EntranceTeleportPatch));
             }
 
