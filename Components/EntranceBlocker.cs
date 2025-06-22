@@ -30,7 +30,6 @@ namespace EntranceBlocker.Components
         private IEnumerator WaitForNetworkSpawn()
         {
             yield return new WaitUntil(() => entranceTeleport != null);
-            yield return new WaitUntil(() => entranceTeleport.NetworkObject.IsSpawned);
 
             EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObject.NetworkObjectId, this);
             EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkObjectReference(entranceTeleport.NetworkObject));
