@@ -18,8 +18,8 @@ namespace EntranceBlocker
 
         internal static void CreateConfig(ConfigFile cfg)
         {
-            blockChance = cfg.Bind("General", "Chance", 0.5f, new ConfigDescription("...what's not clear? Why are you looking at this description?", new AcceptableValueRange<float>(0f, 1f)));
-            blacklistedMoons = cfg.Bind("General", "Blacklisted moons - outside entrances and fire exits", "41 Experimentation,220 Assurance,8 Titan,5 Embrion");
+            blockChance = cfg.Bind("General", "Chance", 0.6f, new ConfigDescription("...what's not clear? Why are you looking at this description?", new AcceptableValueRange<float>(0f, 1f)));
+            blacklistedMoons = cfg.Bind("General", "Blacklisted moons - outside entrances and fire exits", "823 Bozoros,8 Titan,5 Embrion");
             blacklistedMoonsInside = cfg.Bind("General", "Blacklisted moons - inside entrances and fire exits", "");
             blockOutsideMainEntrance = cfg.Bind("General", "Block outside main entrance", false);
             blockInsideMainEntrance = cfg.Bind("General", "Block inside main entrance", false);

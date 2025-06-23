@@ -31,7 +31,7 @@ namespace EntranceBlocker.Components
         {
             yield return new WaitUntil(() => entranceTeleport != null);
 
-            EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObject.NetworkObjectId, this);
+            EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObjectId, this);
             EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkObjectReference(entranceTeleport.NetworkObject));
             canHit = true;
             entranceTeleport.triggerScript.interactable = false;
@@ -45,6 +45,10 @@ namespace EntranceBlocker.Components
         void OnDestroy()
         {
             entranceTeleport.triggerScript.interactable = true;
+
+            EntranceBlockerPlugin.networkManager.blockersDict.Remove(entranceTeleport.NetworkObjectId);
+            EntranceBlockerPlugin.networkManager.reverseBlockersDict.Remove(this);
+            EntranceBlockerPlugin.networkManager.entranceTeleports.Remove(entranceTeleport);
 
             EntranceBlockerPlugin.mls.LogInfo("Entrance blocker destroyed");
         }

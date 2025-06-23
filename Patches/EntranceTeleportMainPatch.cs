@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace EntranceBlocker.Patches
@@ -20,6 +20,16 @@ namespace EntranceBlocker.Patches
             if (Random.Range(0f, 1f) > EBConfig.blockChance.Value) return;
 
             EntranceBlockerPlugin.networkManager.StartCoroutine(EntranceBlockerPlugin.networkManager.WaitForNetworkSpawnServer(__instance));
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(NetworkBehaviour), nameof(NetworkBehaviour.OnDestroy))]
+        private static void OnTeleportDestroy(NetworkBehaviour __instance)
+        {
+            if (__instance is not EntranceTeleport teleport)
+                return;
+
+            if (EntranceBlockerPlugin.networkManager.blockersDict.TryGetValue(teleport.NetworkObjectId, out var blocker))
+                GameObject.Destroy(blocker.gameObject);
         }
     }
 }
