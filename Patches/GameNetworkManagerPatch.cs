@@ -14,6 +14,9 @@ namespace EntranceBlocker.Patches
             EntranceBlockerPlugin.entranceBlockerPrefab = EntranceBlockerPlugin.assetBundle.LoadAsset<GameObject>("planks.prefab");
             EntranceBlockerPlugin.networkManagerPrefab = EntranceBlockerPlugin.assetBundle.LoadAsset<GameObject>("nobject.prefab");
             NetworkManager.Singleton.AddNetworkPrefab(EntranceBlockerPlugin.networkManagerPrefab);
+
+            EntranceBlockerPlugin.mls.LogInfo("Unloading assetbundles...");
+            EntranceBlockerPlugin.assetBundle.UnloadAsync(false);
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.Disconnect))]
