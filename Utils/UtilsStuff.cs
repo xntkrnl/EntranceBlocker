@@ -42,5 +42,9 @@ namespace EntranceBlocker.Utils
             //failsafe
             return Vector3.Lerp(start, end, 0.85f);
         }
+
+        internal static void FunnyMethod()
+        {
+        }
     }
 }

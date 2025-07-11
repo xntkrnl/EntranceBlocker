@@ -1,4 +1,5 @@
-﻿using EntranceBlocker.Utils;
+﻿using BepInEx;
+using EntranceBlocker.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -9,6 +10,7 @@ namespace EntranceBlocker.Components
     internal class EntranceBlockerNO : NetworkBehaviour
     {
         internal Dictionary<EntranceTeleport, EntranceTeleport> entranceTeleports = new Dictionary<EntranceTeleport, EntranceTeleport>();
+        internal Dictionary<EntranceTeleport, bool> entranceTeleportsBoolMap = new Dictionary<EntranceTeleport, bool>();
         internal Dictionary<ulong, EntranceBlocker> blockersDict = new Dictionary<ulong, EntranceBlocker>();
         internal Dictionary<EntranceBlocker, NetworkObjectReference> reverseBlockersDict = new Dictionary<EntranceBlocker, NetworkObjectReference>();
 
@@ -90,10 +92,20 @@ namespace EntranceBlocker.Components
 
         public static bool CheckEntrances(EntranceTeleport entrance)
         {
+            var manager = EntranceBlockerPlugin.networkManager;
+
             //EntranceBlockerPlugin.mls.LogInfo("CheckEntrances called!");
-            if (!EntranceBlockerPlugin.networkManager.entranceTeleports.TryGetValue(entrance, out EntranceTeleport exit))
+            bool result = true;
+            bool resultlocal;
+            if (!manager.entranceTeleports.TryGetValue(entrance, out var exit))
                 return false;
-            return entrance.triggerScript.interactable && exit.triggerScript.interactable;
+
+            manager.entranceTeleportsBoolMap.TryGetValue(entrance, out resultlocal);
+            result = result && resultlocal;
+            manager.entranceTeleportsBoolMap.TryGetValue(exit, out resultlocal);
+            result = result && resultlocal;
+
+            return result;
         }
     }
 }

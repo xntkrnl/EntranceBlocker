@@ -37,6 +37,8 @@ namespace EntranceBlocker.Components
 
             EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObjectId, this);
             EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkObjectReference(entranceTeleport.NetworkObject));
+            //EntranceBlockerPlugin.networkManager.entranceTeleportsBoolMap.Add(entranceTeleport, false);
+            EntranceBlockerPlugin.networkManager.entranceTeleportsBoolMap[entranceTeleport] = false;
             canHit = true;
             isWaitingForSpawn = false;
             entranceTeleport.triggerScript.interactable = false;
@@ -54,7 +56,7 @@ namespace EntranceBlocker.Components
 
             EntranceBlockerPlugin.networkManager.blockersDict.Remove(entranceTeleport.NetworkObjectId);
             EntranceBlockerPlugin.networkManager.reverseBlockersDict.Remove(this);
-            EntranceBlockerPlugin.networkManager.entranceTeleports.Remove(entranceTeleport);
+            EntranceBlockerPlugin.networkManager.entranceTeleportsBoolMap[entranceTeleport] = true;
 
             EntranceBlockerPlugin.mls.LogInfo("Entrance blocker destroyed");
         }
