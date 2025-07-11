@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.ProBuilder.KdTree.Math;
 
 namespace EntranceBlocker.Components
 {
@@ -88,5 +87,13 @@ namespace EntranceBlocker.Components
         }
 
         public static void AddEntrances(EntranceTeleport entrance, EntranceTeleport exit) => EntranceBlockerPlugin.networkManager.entranceTeleports.TryAdd(entrance, exit);
+
+        public static bool CheckEntrances(EntranceTeleport entrance)
+        {
+            //EntranceBlockerPlugin.mls.LogInfo("CheckEntrances called!");
+            if (!EntranceBlockerPlugin.networkManager.entranceTeleports.TryGetValue(entrance, out EntranceTeleport exit))
+                return false;
+            return entrance.triggerScript.interactable && exit.triggerScript.interactable;
+        }
     }
 }

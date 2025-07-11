@@ -12,10 +12,13 @@ namespace EntranceBlocker.Components
         internal EntranceTeleport entranceTeleport = null!;
         internal EntranceTeleport exitSideTeleport = null!;
         private bool canHit = false;
+        private bool isWaitingForSpawn = true;
 
         public bool Hit(int force, Vector3 hitDirection, PlayerControllerB playerWhoHit, bool playHitSFX, int hitID)
         {
-            EntranceBlockerPlugin.mls.LogInfo($"Hit! Source: {playerWhoHit.playerUsername}, canHit: {canHit}");
+            if (playerWhoHit != null)
+                EntranceBlockerPlugin.mls.LogInfo($"Hit! Source: {playerWhoHit.playerUsername}, canHit: {canHit}");
+            else EntranceBlockerPlugin.mls.LogInfo($"Hit! Source: NOT PLAYER, canHit: {canHit}");
 
             if (!canHit)
                 return true;
@@ -30,15 +33,18 @@ namespace EntranceBlocker.Components
         private IEnumerator WaitForNetworkSpawn()
         {
             yield return new WaitUntil(() => entranceTeleport != null);
+            EntranceBlockerPlugin.mls.LogInfo($"EntranceTeleport {entranceTeleport.gameObject.name} with id: {entranceTeleport.entranceId} is now networked and ready for block");
 
             EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObjectId, this);
             EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkObjectReference(entranceTeleport.NetworkObject));
             canHit = true;
+            isWaitingForSpawn = false;
             entranceTeleport.triggerScript.interactable = false;
         }
 
         void Awake()
         {
+            EntranceBlockerPlugin.mls.LogInfo($"EntranceBlocker awake!");
             StartCoroutine(WaitForNetworkSpawn());
         }
 
