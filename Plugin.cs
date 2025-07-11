@@ -17,7 +17,7 @@ namespace EntranceBlocker
     {
         public const string modGUID = "mborsh.EntranceBlocker";
         public const string modName = "EntranceBlocker";
-        public const string modVersion = "1.0.1";
+        public const string modVersion = "1.0.3";
 
         public static EntranceBlockerPlugin Instance = null!;
         internal static ManualLogSource mls = null!;
@@ -43,13 +43,13 @@ namespace EntranceBlocker
             assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             assetBundle = AssetBundle.LoadFromFile(Path.Combine(assemblyLocation, "entranceblockerassetbundle"));
 
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("mattymatty.EntranceTeleportOptimizations"))
+            /*if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("mattymatty.EntranceTeleportOptimizations"))
                 harmony.PatchAll(typeof(mattymattyEntranceTeleportPatch));
             else
             {
                 mls.LogMessage("You are trying to run EntranceBlocker without EntranceTeleportOptimizations. Expect lags.");
                 harmony.PatchAll(typeof(EntranceTeleportPatch));
-            }
+            }*/
 
             harmony.PatchAll(typeof(EntranceTeleportMainPatch));
             harmony.PatchAll(typeof(GameNetworkManagerPatch));
