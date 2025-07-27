@@ -17,7 +17,7 @@ namespace EntranceBlocker
     {
         public const string modGUID = "mborsh.EntranceBlocker";
         public const string modName = "EntranceBlocker";
-        public const string modVersion = "1.0.3";
+        public const string modVersion = "1.0.5";
 
         public static EntranceBlockerPlugin Instance = null!;
         internal static ManualLogSource mls = null!;

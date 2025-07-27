@@ -36,7 +36,7 @@ namespace EntranceBlocker.Components
             EntranceBlockerPlugin.mls.LogInfo($"EntranceTeleport {entranceTeleport.gameObject.name} with id: {entranceTeleport.entranceId} is now networked and ready for block");
 
             EntranceBlockerPlugin.networkManager.blockersDict.Add(entranceTeleport.NetworkObjectId, this);
-            EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkObjectReference(entranceTeleport.NetworkObject));
+            EntranceBlockerPlugin.networkManager.reverseBlockersDict.Add(this, new NetworkBehaviourReference(entranceTeleport));
             //EntranceBlockerPlugin.networkManager.entranceTeleportsBoolMap.Add(entranceTeleport, false);
             EntranceBlockerPlugin.networkManager.entranceTeleportsBoolMap[entranceTeleport] = false;
             canHit = true;

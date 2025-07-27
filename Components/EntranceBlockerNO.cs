@@ -12,7 +12,7 @@ namespace EntranceBlocker.Components
         internal Dictionary<EntranceTeleport, EntranceTeleport> entranceTeleports = new Dictionary<EntranceTeleport, EntranceTeleport>();
         internal Dictionary<EntranceTeleport, bool> entranceTeleportsBoolMap = new Dictionary<EntranceTeleport, bool>();
         internal Dictionary<ulong, EntranceBlocker> blockersDict = new Dictionary<ulong, EntranceBlocker>();
-        internal Dictionary<EntranceBlocker, NetworkObjectReference> reverseBlockersDict = new Dictionary<EntranceBlocker, NetworkObjectReference>();
+        internal Dictionary<EntranceBlocker, NetworkBehaviourReference> reverseBlockersDict = new Dictionary<EntranceBlocker, NetworkBehaviourReference>();
 
         public override void OnNetworkSpawn()
         {
@@ -54,16 +54,17 @@ namespace EntranceBlocker.Components
         }
 
         [ServerRpc(RequireOwnership = false)]
-        internal void OnHitServerRpc(NetworkObjectReference noRef)
+        internal void OnHitServerRpc(NetworkBehaviourReference noRef)
         {
-            var blocker = blockersDict[noRef.NetworkObjectId];
+            noRef.TryGet(out EntranceTeleport teleport);
+            var blocker = blockersDict[teleport.NetworkObjectId];
 
             if (blocker.blockers.Count == 1)
                 DestroyClientRpc(noRef);
             else
             {
                 int random = Random.Range(0, blocker.blockers.Count);
-                OnHitClientRpc(random, noRef.NetworkObjectId);
+                OnHitClientRpc(random, teleport.NetworkObjectId);
             }
         }
 
@@ -77,15 +78,15 @@ namespace EntranceBlocker.Components
         }
 
         [ClientRpc]
-        private void DestroyClientRpc(NetworkObjectReference noRef)
+        private void DestroyClientRpc(NetworkBehaviourReference noRef)
         {
-            var component = blockersDict[noRef.NetworkObjectId];
-            noRef.TryGet(out NetworkObject no);
+            noRef.TryGet(out EntranceTeleport teleport);
+            var blocker = blockersDict[teleport.NetworkObjectId];
 
-            entranceTeleports.Remove(no.GetComponent<EntranceTeleport>());
-            reverseBlockersDict.Remove(component);
-            blockersDict.Remove(noRef.NetworkObjectId);
-            Destroy(component.gameObject);
+            entranceTeleports.Remove(teleport);
+            reverseBlockersDict.Remove(blocker);
+            blockersDict.Remove(teleport.NetworkObjectId);
+            Destroy(blocker.gameObject);
         }
 
         public static void AddEntrances(EntranceTeleport entrance, EntranceTeleport exit) => EntranceBlockerPlugin.networkManager.entranceTeleports.TryAdd(entrance, exit);
